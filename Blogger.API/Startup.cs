@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blogger.API.Lib;
+using Blogger.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Blogger.API.Config;
 
 namespace Blogger.API
 {
@@ -18,15 +22,16 @@ namespace Blogger.API
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            DependencyInjection di = new DependencyInjection();
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.AddDbContext<BloggerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BloggerConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

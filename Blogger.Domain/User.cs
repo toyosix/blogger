@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Blogger.Domain
 {
-    public class Blogger
+    public class User
     {
         public int id { get; set; }
         public string name { get; set; }

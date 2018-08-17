@@ -8,7 +8,7 @@ namespace Blogger.Domain
     {
         public int id { get; set; }
         public string name { get; set; }
-        public Blogger blogger { get; set; }
-        public int blogger_id { get; set; }
+        public User users { get; set; }
+        public int user_id { get; set; }
     }
 }

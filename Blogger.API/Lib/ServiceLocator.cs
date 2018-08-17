@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Blogger.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Blogger.API.Config
+namespace Blogger.API.Lib
 {
     public class ServiceLocator : IServiceLocator
     {
@@ -22,8 +23,6 @@ namespace Blogger.API.Config
         {
             this.servicesType = new Dictionary<Type, Type>();
             this.instantiatedServices = new Dictionary<Type, object>();
-
-            this.BuildServiceTypesMap();
         }
 
         public static IServiceLocator Instance
@@ -31,7 +30,6 @@ namespace Blogger.API.Config
             get
             {
                 lock (TheLock) // thread safety
-
                 {
                     if (instance == null)
                     {
@@ -43,7 +41,9 @@ namespace Blogger.API.Config
             }
         }
 
-        public T GetService<T>()
+        
+
+        public T GetService<T>(BloggerContext dbcontext)
         {
             if (this.instantiatedServices.ContainsKey(typeof(T)))
             {
@@ -52,15 +52,16 @@ namespace Blogger.API.Config
             else
             {
                 // lazy initialization
-
                 try
                 {
                     // use reflection to invoke the service
+                    Type[] types = new Type[1];
+                    types[0] = typeof(BloggerContext); // add the parameter type into an array
 
-                    ConstructorInfo constructor = servicesType[typeof(T)].GetConstructor(new Type[0]);
+                    ConstructorInfo constructor = servicesType[typeof(T)].GetConstructor(types);
                     Debug.Assert(constructor != null, "Cannot find a suitable constructor for " + typeof(T));
 
-                    T service = (T)constructor.Invoke(null);
+                    T service = (T)constructor.Invoke(new object[] { dbcontext });
 
                     // add the service to the ones that we have already instantiated
 
@@ -68,11 +69,16 @@ namespace Blogger.API.Config
 
                     return service;
                 }
-                catch (KeyNotFoundException)
+                catch (KeyNotFoundException ex)
                 {
-                    throw new ApplicationException("The requested service is not registered");
+                    throw new ApplicationException("The requested service is not registered" + ex);
                 }
             }
+        }
+
+        public void Register<I, C>()
+        {
+            servicesType.Add(typeof(I), typeof(C));
         }
 
     }

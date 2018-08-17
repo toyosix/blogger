@@ -9,13 +9,17 @@ namespace Blogger.Data
     public class BloggerContext:DbContext
     {
 
-        public BloggerContext()
+        public BloggerContext(DbContextOptions<BloggerContext> options):base(options)
         {
 
         }
 
-        public DbSet<Blogger.Domain.Blogger> Bloggers { get; set; }
-        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Blogger.Domain.User> Users { get; set; }
+        public DbSet<Blogger.Domain.Blog> Blogs { get; set; }
+        public DbSet<Blogger.Domain.Post> Posts { get; set; }
+        public DbSet<Blogger.Domain.Comment> Comments { get; set; }
+        public DbSet<Blogger.Domain.Tag> Tags { get; set; }
+        public DbSet<Blogger.Domain.PostTag> PostTags { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,7 +28,28 @@ namespace Blogger.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<PostTag>().HasKey(s => new { s.post_id, s.tag_id });
+
+            /**
+             SHADOW PROPERTIES
+             */
+            modelBuilder.Entity<User>().Property<DateTime>("created_at");
+            modelBuilder.Entity<User>().Property<DateTime>("updated_at");
+
+            modelBuilder.Entity<Blog>().Property<DateTime>("created_at");
+            modelBuilder.Entity<Blog>().Property<DateTime>("updated_at");
+
+            modelBuilder.Entity<Post>().Property<DateTime>("created_at");
+            modelBuilder.Entity<Post>().Property<DateTime>("updated_at");
+
+            modelBuilder.Entity<Comment>().Property<DateTime>("created_at");
+            modelBuilder.Entity<Comment>().Property<DateTime>("updated_at");
+
+            modelBuilder.Entity<Tag>().Property<DateTime>("created_at");
+            modelBuilder.Entity<Tag>().Property<DateTime>("updated_at");
+
+            modelBuilder.Entity<PostTag>().Property<DateTime>("created_at");
+            modelBuilder.Entity<PostTag>().Property<DateTime>("updated_at");
         }
 
     }
