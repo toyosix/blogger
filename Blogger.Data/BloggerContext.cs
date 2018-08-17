@@ -15,6 +15,7 @@ namespace Blogger.Data
         }
 
         public DbSet<Blogger.Domain.Blogger> Bloggers { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
