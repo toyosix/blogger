@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Blogger.API.Lib;
 using Blogger.Data;
 using Blogger.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blogger.API.Service
 {
@@ -31,10 +32,19 @@ namespace Blogger.API.Service
 
             var isSaved = await dbcontext.SaveChangesAsync(); // insert into DB
 
+            //dbcontext.Entry(user).State = EntityState.Detached; // remove user entity from tracking/memory
+
             return isSaved >= 1 ? true : false;
         }
 
         public async Task<User> GetUserbyId(int id)
+        {
+            var user = await this.dbcontext.Users.FirstOrDefaultAsync(u => u.id == id); // untracked : from DB
+
+            return user;
+        }
+
+        public async Task<User> GetUserbyId_tracking(int id)
         {
             var user = await this.dbcontext.Users.FindAsync(id); // find in memory
 

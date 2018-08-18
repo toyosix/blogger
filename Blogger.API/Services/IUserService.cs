@@ -12,5 +12,6 @@ namespace Blogger.API.Service
     {
         Task<bool> InsertUser(string name);
         Task<User> GetUserbyId(int id);
+        Task<User> GetUserbyId_tracking(int id);
     }
 }

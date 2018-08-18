@@ -8,65 +8,63 @@ using Microsoft.EntityFrameworkCore;
 using Blogger.Data;
 using Blogger.Domain;
 using Blogger.API.Lib;
-using Blogger.API.Service;
 
-namespace Blogger.API.Controllers
+namespace Blogger.API.Services
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class BlogsController : ControllerBase
     {
         private readonly BloggerContext _context;
-        IUserService userservice = null;
+        IBlogService blogService;
 
-        public UsersController(BloggerContext context)
+        public BlogsController(BloggerContext context)
         {
             _context = context;
-            userservice = ServiceLocator.Instance.GetService<IUserService>(context);
+            blogService = ServiceLocator.Instance.GetService<IBlogService>(context);
         }
 
-
-        // GET: api/Users
+        // GET: api/Blogs
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<Blog> GetBlogs()
         {
-            return _context.Users;
+            return _context.Blogs;
         }
 
-        // GET: api/Users/5
+        // GET: api/Blogs/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        public async Task<IActionResult> GetBlog([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await userservice.GetUserbyId_tracking(id);
+            var blog = await _context.Blogs.FindAsync(id);
 
-            if (user == null)
+            if (blog == null)
             {
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(blog);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Blogs/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
+        public async Task<IActionResult> PutBlog([FromRoute] int id, [FromBody] Blog blog)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != user.id)
+            if (id != blog.id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(blog).State = EntityState.Modified;
 
             try
             {
@@ -74,7 +72,7 @@ namespace Blogger.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!BlogExists(id))
                 {
                     return NotFound();
                 }
@@ -87,44 +85,45 @@ namespace Blogger.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
+        // POST: api/Blogs
         [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
+        public async Task<IActionResult> PostBlog([FromBody] Blog blog)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await userservice.InsertUser(user.name);
+            _context.Blogs.Add(blog);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.id }, user);
+            return CreatedAtAction("GetBlog", new { id = blog.id }, blog);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Blogs/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        public async Task<IActionResult> DeleteBlog([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var blog = await _context.Blogs.FindAsync(id);
+            if (blog == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Blogs.Remove(blog);
             await _context.SaveChangesAsync();
 
-            return Ok(user);
+            return Ok(blog);
         }
 
-        private bool UserExists(int id)
+        private bool BlogExists(int id)
         {
-            return _context.Users.Any(e => e.id == id);
+            return _context.Blogs.Any(e => e.id == id);
         }
     }
 }

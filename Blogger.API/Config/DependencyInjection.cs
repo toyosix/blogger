@@ -1,5 +1,6 @@
 ﻿using Blogger.API.Lib;
 using Blogger.API.Service;
+using Blogger.API.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,18 @@ namespace Blogger.API.Config
         {
             //REGISTER USER SERVICE
             ServiceLocator.Instance.Register<IUserService, UserService>();
+
+            //REGISTER BLOG SERVICE
+            ServiceLocator.Instance.Register<IBlogService, BlogService>();
+
+            //REGISTER COMMENT SERVICE
+            ServiceLocator.Instance.Register<ICommentService, CommentService>();
+
+            //REGISTER POST SERVICE
+            ServiceLocator.Instance.Register<IPostService, PostService>();
+
+            //REGISTER TAG SERVICE
+            ServiceLocator.Instance.Register<ITagService, TagService>();
         }
 
     }
