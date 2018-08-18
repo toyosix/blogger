@@ -51,8 +51,53 @@ namespace Blogger.API.Service
             return user;
         }
 
+        public async Task<List<User>> GetAllUser()
+        {
+            var users = await this.dbcontext.Users.ToListAsync();
+            return users;
+        }
 
+        public async Task<bool> UserExists(int id)
+        {
+            return await this.dbcontext.Users.AnyAsync(e => e.id == id);
+        }
 
+        public async Task<bool> UpdateUser(int id, User user)
+        {
+            this.dbcontext.Entry(user).State = EntityState.Modified;
 
+            try
+            {
+               var saved = await this.dbcontext.SaveChangesAsync();
+
+                return saved >= 1 ? true : false;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await UserExists(id))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+        }
+
+        public async Task<bool> DeleteUser(int id)
+        {
+            var user = await this.dbcontext.Users.FindAsync(id);
+            if (user == null)
+            {
+                return false;
+            }
+            this.dbcontext.Users.Remove(user);
+           var saved = await this.dbcontext.SaveChangesAsync();
+
+            return saved >= 1 ? true : false;
+        }
+       
     }
 }

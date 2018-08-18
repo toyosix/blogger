@@ -28,9 +28,9 @@ namespace Blogger.API.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
-            return _context.Users;
+            return await userservice.GetAllUser();
         }
 
         // GET: api/Users/5
@@ -61,27 +61,11 @@ namespace Blogger.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != user.id)
-            {
-                return BadRequest();
-            }
+            var isUpdated = await userservice.UpdateUser(id, user);
 
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
+            if (isUpdated)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -110,21 +94,15 @@ namespace Blogger.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var isDeleted = await this.userservice.DeleteUser(id);
+
+            if (!isDeleted)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(user);
+            return Ok(isDeleted);
         }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.id == id);
-        }
+        
     }
 }
