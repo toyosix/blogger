@@ -49,7 +49,7 @@ namespace Blogger.API.Service
 
         public async Task<List<User>> GetAllUser()
         {
-            var users = await this.dbcontext.Users.Include(b=>b.blog).ToListAsync(); // Eager Loading
+            var users = await this.dbcontext.Users.Include(b=> b.blog).ToListAsync(); // Eager Loading
             return users;
         }
 

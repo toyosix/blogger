@@ -30,7 +30,9 @@ namespace Blogger.API.Controllers
         [HttpGet]
         public async Task<List<User>> GetUsers()
         {
-            return await userservice.GetAllUser();
+            var users = await userservice.GetAllUser();
+
+            return users;
         }
 
         // GET: api/Users/5
