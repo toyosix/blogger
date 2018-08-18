@@ -8,6 +8,6 @@ namespace Blogger.Domain
     {
         public int id { get; set; }
         public string name { get; set; }
-        public List<PostTag> posttags { get; set; }
+        public virtual List<PostTag> posttags { get; set; }
     }
 }

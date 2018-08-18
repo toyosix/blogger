@@ -33,7 +33,9 @@ namespace Blogger.API
         {
             services.AddSingleton(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddDbContextPool<BloggerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BloggerConnection")));
+            services.AddDbContextPool<BloggerContext>(options => options
+            .UseLazyLoadingProxies()
+            .UseSqlServer(Configuration.GetConnectionString("BloggerConnection")));
             services.AddMvc().AddJsonOptions(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });

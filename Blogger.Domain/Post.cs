@@ -10,10 +10,9 @@ namespace Blogger.Domain
         public int id { get; set; }
         public string title { get; set; }
         public string text { get; set; }
-        public Blog blog { get; set; }
-        public List<Comment> comments { get; set; }
-        [ForeignKey("BlogId")]
+        public virtual Blog blog { get; set; }
+        public virtual List<Comment> comments { get; set; } // lazy loading
         public int blog_id { get; set; }
-        public List<PostTag> posttags { get; set; }
+        public virtual List<PostTag> posttags { get; set; }
     }
 }
