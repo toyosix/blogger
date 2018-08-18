@@ -27,8 +27,7 @@ namespace Blogger.API.Service
 
             var timestamp = DateTime.Now;
 
-            dbcontext.Entry(user).Property("created_at").CurrentValue = timestamp; // adding shadow properties
-            dbcontext.Entry(user).Property("updated_at").CurrentValue = timestamp; // adding shadow properties
+           
 
             var isSaved = await dbcontext.SaveChangesAsync(); // insert into DB
 
@@ -39,7 +38,7 @@ namespace Blogger.API.Service
 
         public async Task<User> GetUserbyId(int id)
         {
-            var user = await this.dbcontext.Users.FirstOrDefaultAsync(u => u.id == id); // untracked : from DB
+            var user = await this.dbcontext.Users.AsNoTracking().OrderBy(o=>o.id).FirstOrDefaultAsync(u => u.id == id); // untracked : from DB
 
             return user;
         }

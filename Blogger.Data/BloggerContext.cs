@@ -52,5 +52,28 @@ namespace Blogger.Data
             modelBuilder.Entity<PostTag>().Property<DateTime>("updated_at");
         }
 
+        public override int SaveChanges()
+        {
+            ChangeTracker.DetectChanges();
+
+            var timestamp = DateTime.Now;
+
+            foreach(var entry in ChangeTracker.Entries())
+            {
+                if(entry.State == EntityState.Added)
+                {
+                    entry.Property("created_at").CurrentValue = timestamp; // adding shadow properties
+                    entry.Property("updated_at").CurrentValue = timestamp; // adding shadow properties
+                }
+
+                if(entry.State == EntityState.Modified)
+                {
+                    entry.Property("updated_at").CurrentValue = timestamp; // adding shadow properties
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
     }
 }
