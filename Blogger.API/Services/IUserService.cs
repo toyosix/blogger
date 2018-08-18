@@ -17,5 +17,6 @@ namespace Blogger.API.Service
         Task<bool> UserExists(int id);
         Task<bool> UpdateUser(int id, User user);
         Task<bool> DeleteUser(int id);
+
     }
 }

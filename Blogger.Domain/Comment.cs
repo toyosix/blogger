@@ -10,5 +10,6 @@ namespace Blogger.Domain
         public string full_name { get; set; }
         public string text { get; set; }
         public int post_id { get; set; }
+        public Post post { get; set; }
     }
 }

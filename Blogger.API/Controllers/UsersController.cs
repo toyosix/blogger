@@ -80,9 +80,16 @@ namespace Blogger.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            await userservice.InsertUser(user.name);
+            var isSaved = await userservice.InsertUser(user.name);
 
-            return CreatedAtAction("GetUser", new { id = user.id }, user);
+            if (isSaved)
+            {
+                return CreatedAtAction("GetUser", new { id = user.id }, user);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
 
         // DELETE: api/Users/5
@@ -103,6 +110,6 @@ namespace Blogger.API.Controllers
 
             return Ok(isDeleted);
         }
-        
+
     }
 }

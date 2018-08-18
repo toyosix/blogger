@@ -22,12 +22,8 @@ namespace Blogger.API.Service
 
         public async Task<bool> InsertUser(string name)
         {
-            user.name = name;
+            user = new User { name = name };
             dbcontext.Add(user); // tracking user object
-
-            var timestamp = DateTime.Now;
-
-           
 
             var isSaved = await dbcontext.SaveChangesAsync(); // insert into DB
 
@@ -38,7 +34,8 @@ namespace Blogger.API.Service
 
         public async Task<User> GetUserbyId(int id)
         {
-            var user = await this.dbcontext.Users.AsNoTracking().OrderBy(o=>o.id).FirstOrDefaultAsync(u => u.id == id); // untracked : from DB
+            var user = await this.dbcontext.Users.AsNoTracking()
+                .OrderBy(o=>o.id).FirstOrDefaultAsync(u => u.id == id); // untracked : from DB
 
             return user;
         }
@@ -52,7 +49,7 @@ namespace Blogger.API.Service
 
         public async Task<List<User>> GetAllUser()
         {
-            var users = await this.dbcontext.Users.ToListAsync();
+            var users = await this.dbcontext.Users.Include(b=>b.blog).ToListAsync(); // Eager Loading
             return users;
         }
 
