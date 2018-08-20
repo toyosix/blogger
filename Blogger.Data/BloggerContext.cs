@@ -35,6 +35,9 @@ namespace Blogger.Data
             modelBuilder.Entity<Blog>().HasMany(e => e.posts).WithOne(e=>e.blog).HasForeignKey(p=>p.blog_id);
             modelBuilder.Entity<Post>().HasMany(e => e.comments).WithOne(e => e.post).HasForeignKey(c => c.post_id);
 
+            // SEEDING : adding records to DB at creation time. [User Table]
+            modelBuilder.Entity<User>().HasData(new { Name = "Toyosi Oyesola" }, new { Name = "John Doe" });
+
             /**
              SHADOW PROPERTIES
              */
