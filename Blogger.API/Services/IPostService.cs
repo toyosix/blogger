@@ -9,7 +9,7 @@ namespace Blogger.API.Services
 {
     public interface IPostService
     {
-        Task<bool> InsertPost(string title, string text);
+        Post InsertPost(int blog_id, string title, string text, string[] tag);
         Task<Post> GetPostbyId(int id);
         JToken GetAllPost();
         Task<Post> GetPostByTag(int tag_id);

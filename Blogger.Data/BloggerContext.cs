@@ -30,13 +30,18 @@ namespace Blogger.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PostTag>().HasKey(s => new { s.post_id, s.tag_id });
+            modelBuilder.Entity<PostTag>().HasKey(s => new { s.post_id, s.tag_id });           
             modelBuilder.Entity<User>().HasOne(e => e.blog).WithOne(e => e.user).HasForeignKey<Blog>(b=>b.user_id);
             modelBuilder.Entity<Blog>().HasMany(e => e.posts).WithOne(e=>e.blog).HasForeignKey(p=>p.blog_id);
             modelBuilder.Entity<Post>().HasMany(e => e.comments).WithOne(e => e.post).HasForeignKey(c => c.post_id);
 
             // SEEDING : adding records to DB at creation time. [User Table]
-            modelBuilder.Entity<User>().HasData(new { Name = "Toyosi Oyesola" }, new { Name = "John Doe" });
+            modelBuilder.Entity<User>().HasData(
+                new { id = 1, Name = "Toyosi Oyesola", created_at = DateTime.Now, updated_at = DateTime.Now }, 
+                new { id = 2, Name = "John Doe", created_at = DateTime.Now, updated_at = DateTime.Now });
+
+            modelBuilder.Entity<Blog>().HasData(
+                new { id = 1, name = "Foodie", user_id = 1, created_at = DateTime.Now, updated_at = DateTime.Now });
 
             /**
              SHADOW PROPERTIES

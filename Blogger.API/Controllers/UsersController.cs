@@ -16,12 +16,10 @@ namespace Blogger.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly BloggerContext _context;
         IUserService userservice = null;
 
         public UsersController(BloggerContext context)
         {
-            _context = context;
             userservice = ServiceLocator.Instance.GetService<IUserService>(context);
         }
 
