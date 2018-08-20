@@ -10,7 +10,6 @@ namespace Blogger.API.Services
     {
         Task<bool> InsertBlog(string name);
         Task<Blog> GetBlogbyId(int id);
-        Task<Blog> GetBlogbyId_tracking(int id);
         Task<Blog> GetBlogbyUser_id(int id);
     }
 }

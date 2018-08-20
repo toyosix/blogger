@@ -18,17 +18,17 @@ namespace Blogger.API.Services
             comment = new Comment();
         }
 
-        public Task<List<Comment>> GetCommentbyPost_Id(int id)
+        public Task<List<Comment>> GetCommentsbyPost_Id(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Comment> GetUserbyId(int id)
+        public Task<Comment> GetCommentbyId(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Comment> GetUserbyId_tracking(int id)
+        public Task<Comment> GetCommentbyId_tracking(int id)
         {
             throw new NotImplementedException();
         }

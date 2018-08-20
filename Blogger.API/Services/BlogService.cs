@@ -23,11 +23,6 @@ namespace Blogger.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<Blog> GetBlogbyId_tracking(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<Blog> GetBlogbyUser_id(int id)
         {
             throw new NotImplementedException();

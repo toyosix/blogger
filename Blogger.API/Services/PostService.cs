@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blogger.Data;
 using Blogger.Domain;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Blogger.API.Services
 {
@@ -18,9 +20,14 @@ namespace Blogger.API.Services
             post = new Post();
         }
 
-        public Task<List<Post>> GetAllPost()
+        public JToken GetAllPost()
         {
-            throw new NotImplementedException();
+            var posts = dbcontext.Posts.Select(s => new { s.id, s.title, s.text, comment_count = s.comments.Count })
+                .ToList(); // query projections
+
+           var jsonObject = JObject.Parse(JsonConvert.SerializeObject(posts));
+
+            return jsonObject;
         }
 
         public Task<Post> GetPostbyId(int id)
@@ -28,7 +35,7 @@ namespace Blogger.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<Post> GetPostbyId_tracking(int id)
+        public Task<Post> GetPostByTag(int tag_id)
         {
             throw new NotImplementedException();
         }

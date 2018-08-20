@@ -1,4 +1,5 @@
 ﻿using Blogger.Domain;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,9 @@ namespace Blogger.API.Services
 {
     public interface IPostService
     {
-
         Task<bool> InsertPost(string title, string text);
         Task<Post> GetPostbyId(int id);
-        Task<Post> GetPostbyId_tracking(int id);
-        Task<List<Post>> GetAllPost();
+        JToken GetAllPost();
+        Task<Post> GetPostByTag(int tag_id);
     }
 }
